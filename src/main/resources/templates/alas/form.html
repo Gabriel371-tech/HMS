@@ -34,9 +34,14 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <form th:action="@{/dashboard/alas/salvar}" th:object="${ala}" method="post">
+                            <input type="hidden" th:field="*{codala}">
                             <div class="mb-3">
                                 <label for="nome" class="form-label">Nome da Ala</label>
                                 <input type="text" th:field="*{nome}" class="form-control" id="nome" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="andar" class="form-label">Andar</label>
+                                <input type="number" th:field="*{andar}" class="form-control" id="andar">
                             </div>
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-success">Salvar</button>

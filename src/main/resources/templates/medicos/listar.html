@@ -36,6 +36,7 @@
                             <th>Nome</th>
                             <th>Especialidade</th>
                             <th>Telefone</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,6 +45,10 @@
                             <td th:text="${medico.nome}">-</td>
                             <td th:text="${medico.especialidade?.nome}">-</td>
                             <td th:text="${medico.telefone}">-</td>
+                            <td>
+                                <a th:href="@{/dashboard/medicos/editar/{id}(id=${medico.codmedico})}" class="btn btn-sm btn-warning">Editar</a>
+                                <a th:href="@{/dashboard/medicos/excluir/{id}(id=${medico.codmedico})}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

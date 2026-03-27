@@ -25,7 +25,9 @@ public class Paciente {
 
     private String nome;
 
-    private LocalDate datanasc;
+    private String cpf;
+
+    private LocalDate dataNascimento;
 
     @ManyToOne
     @JoinColumn(name = "codtipofk")
