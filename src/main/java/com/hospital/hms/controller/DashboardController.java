@@ -19,6 +19,7 @@ public class DashboardController {
     @Autowired private EspecialidadeService especialidadeService;
     @Autowired private QuartoService quartoService;
     @Autowired private TipoSanguineoService tipoSanguineoService;
+    @Autowired private UsuarioService usuarioService;
 
     private boolean isNotLogged(HttpSession session) {
         return session.getAttribute("usuarioLogado") == null;
@@ -34,6 +35,49 @@ public class DashboardController {
         model.addAttribute("totalAlas", alaService.listarTodos().size());
         model.addAttribute("totalQuartos", quartoService.listarTodos().size());
         return "dashboard";
+    }
+
+    // MEU PERFIL
+    @GetMapping("/perfil")
+    public String meuPerfil(HttpSession session, Model model) {
+        if (isNotLogged(session)) return "redirect:/login";
+        return "perfil";
+    }
+
+    @PostMapping("/perfil/salvar")
+    public String salvarPerfil(@RequestParam String nome, HttpSession session, Model model) {
+        if (isNotLogged(session)) return "redirect:/login";
+        Usuario logado = (Usuario) session.getAttribute("usuarioLogado");
+        logado.setNome(nome);
+        usuarioService.salvar(logado);
+        session.setAttribute("usuarioLogado", logado); // Atualiza na sessão
+        model.addAttribute("sucesso", "Perfil atualizado com sucesso!");
+        return "perfil";
+    }
+
+    // CONFIGURAÇÕES
+    @GetMapping("/configuracoes")
+    public String configuracoes(HttpSession session, Model model) {
+        if (isNotLogged(session)) return "redirect:/login";
+        return "configuracoes";
+    }
+
+    @PostMapping("/configuracoes/senha")
+    public String alterarSenha(@RequestParam String senhaAtual, @RequestParam String novaSenha, @RequestParam String confirmarSenha, HttpSession session, Model model) {
+        if (isNotLogged(session)) return "redirect:/login";
+        Usuario logado = (Usuario) session.getAttribute("usuarioLogado");
+
+        if (!logado.getPassword().equals(senhaAtual)) {
+            model.addAttribute("erroSenha", "A senha atual está incorreta.");
+        } else if (!novaSenha.equals(confirmarSenha)) {
+            model.addAttribute("erroSenha", "A nova senha e a confirmação não coincidem.");
+        } else {
+            logado.setPassword(novaSenha);
+            usuarioService.salvar(logado);
+            session.setAttribute("usuarioLogado", logado);
+            model.addAttribute("sucessoSenha", "Senha alterada com sucesso!");
+        }
+        return "configuracoes";
     }
 
     // MÉDICOS
