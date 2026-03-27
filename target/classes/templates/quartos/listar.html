@@ -36,13 +36,20 @@
                     <thead class="table-dark">
                         <tr>
                             <th>Número</th>
+                            <th>Tipo</th>
                             <th>Ala</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="quarto : ${quartos}">
                             <td th:text="${quarto.numero}">-</td>
+                            <td th:text="${quarto.tipo}">-</td>
                             <td th:text="${quarto.ala?.nome}">-</td>
+                            <td>
+                                <a th:href="@{/dashboard/quartos/editar/{id}(id=${quarto.codquarto})}" class="btn btn-sm btn-warning">Editar</a>
+                                <a th:href="@{/dashboard/quartos/excluir/{id}(id=${quarto.codquarto})}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

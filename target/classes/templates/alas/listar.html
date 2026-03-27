@@ -36,11 +36,18 @@
                     <thead class="table-dark">
                         <tr>
                             <th>Nome</th>
+                            <th>Andar</th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="ala : ${alas}">
                             <td th:text="${ala.nome}">-</td>
+                            <td th:text="${ala.andar}">-</td>
+                            <td>
+                                <a th:href="@{/dashboard/alas/editar/{id}(id=${ala.codala})}" class="btn btn-sm btn-warning">Editar</a>
+                                <a th:href="@{/dashboard/alas/excluir/{id}(id=${ala.codala})}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

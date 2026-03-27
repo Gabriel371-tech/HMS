@@ -34,9 +34,14 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <form th:action="@{/dashboard/especialidades/salvar}" th:object="${especialidade}" method="post">
+                            <input type="hidden" th:field="*{codespecialidade}">
                             <div class="mb-3">
                                 <label for="nome" class="form-label">Nome da Especialidade</label>
                                 <input type="text" th:field="*{nome}" class="form-control" id="nome" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descricao" class="form-label">Descrição</label>
+                                <textarea th:field="*{descricao}" class="form-control" id="descricao" rows="3"></textarea>
                             </div>
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-success">Salvar</button>

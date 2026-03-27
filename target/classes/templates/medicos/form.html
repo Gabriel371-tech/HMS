@@ -31,6 +31,7 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <form th:action="@{/dashboard/medicos/salvar}" th:object="${medico}" method="post">
+                            <input type="hidden" th:field="*{codmedico}">
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="nome" class="form-label">Nome</label>
@@ -46,7 +47,7 @@
                                     <label for="especialidade" class="form-label">Especialidade</label>
                                     <select th:field="*{especialidade}" class="form-select" id="especialidade" required>
                                         <option value="">Selecione...</option>
-                                        <option th:each="esp : ${especialidades}" th:value="${esp.id}" th:text="${esp.nome}"></option>
+                                        <option th:each="esp : ${especialidades}" th:value="${esp.codespecialidade}" th:text="${esp.nome}"></option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">

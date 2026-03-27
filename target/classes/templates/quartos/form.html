@@ -34,15 +34,20 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <form th:action="@{/dashboard/quartos/salvar}" th:object="${quarto}" method="post">
+                            <input type="hidden" th:field="*{codquarto}">
                             <div class="mb-3">
                                 <label for="numero" class="form-label">Número do Quarto</label>
-                                <input type="text" th:field="*{numero}" class="form-control" id="numero" required>
+                                <input type="number" th:field="*{numero}" class="form-control" id="numero" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tipo" class="form-label">Tipo de Quarto</label>
+                                <input type="text" th:field="*{tipo}" class="form-control" id="tipo" placeholder="Ex: Particular, Semi-privativo, Enfermaria">
                             </div>
                             <div class="mb-3">
                                 <label for="ala" class="form-label">Ala</label>
                                 <select th:field="*{ala}" class="form-select" id="ala" required>
                                     <option value="">Selecione...</option>
-                                    <option th:each="ala : ${alas}" th:value="${ala.id}" th:text="${ala.nome}"></option>
+                                    <option th:each="a : ${alas}" th:value="${a.codala}" th:text="${a.nome}"></option>
                                 </select>
                             </div>
                             <div class="mt-4">
