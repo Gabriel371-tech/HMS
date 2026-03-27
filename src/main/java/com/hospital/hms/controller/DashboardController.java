@@ -31,6 +31,8 @@ public class DashboardController {
         model.addAttribute("totalMedicos", medicoService.listarTodos().size());
         model.addAttribute("totalPacientes", pacienteService.listarTodos().size());
         model.addAttribute("totalLeitos", leitoService.listarTodos().size());
+        model.addAttribute("totalAlas", alaService.listarTodos().size());
+        model.addAttribute("totalQuartos", quartoService.listarTodos().size());
         return "dashboard";
     }
 
@@ -46,13 +48,30 @@ public class DashboardController {
     public String novoMedico(HttpSession session, Model model) {
         if (isNotLogged(session)) return "redirect:/login";
         model.addAttribute("medico", new Medico());
-        model.addAttribute("especialidades", especialidadeService.listarTodas());
+        model.addAttribute("especialidades", especialidadeService.listarTodos());
+        return "medicos/form";
+    }
+
+    @GetMapping("/medicos/editar/{id}")
+    public String editarMedico(@PathVariable Long id, HttpSession session, Model model) {
+        if (isNotLogged(session)) return "redirect:/login";
+        Medico medico = medicoService.buscarPorId(id).orElse(null);
+        if (medico == null) return "redirect:/dashboard/medicos";
+        model.addAttribute("medico", medico);
+        model.addAttribute("especialidades", especialidadeService.listarTodos());
         return "medicos/form";
     }
 
     @PostMapping("/medicos/salvar")
     public String salvarMedico(@ModelAttribute Medico medico) {
         medicoService.salvar(medico);
+        return "redirect:/dashboard/medicos";
+    }
+
+    @GetMapping("/medicos/excluir/{id}")
+    public String excluirMedico(@PathVariable Long id, HttpSession session) {
+        if (isNotLogged(session)) return "redirect:/login";
+        medicoService.excluir(id);
         return "redirect:/dashboard/medicos";
     }
 
@@ -72,9 +91,26 @@ public class DashboardController {
         return "pacientes/form";
     }
 
+    @GetMapping("/pacientes/editar/{id}")
+    public String editarPaciente(@PathVariable Long id, HttpSession session, Model model) {
+        if (isNotLogged(session)) return "redirect:/login";
+        Paciente paciente = pacienteService.buscarPorId(id).orElse(null);
+        if (paciente == null) return "redirect:/dashboard/pacientes";
+        model.addAttribute("paciente", paciente);
+        model.addAttribute("tiposSanguineos", tipoSanguineoService.listarTodos());
+        return "pacientes/form";
+    }
+
     @PostMapping("/pacientes/salvar")
     public String salvarPaciente(@ModelAttribute Paciente paciente) {
         pacienteService.salvar(paciente);
+        return "redirect:/dashboard/pacientes";
+    }
+
+    @GetMapping("/pacientes/excluir/{id}")
+    public String excluirPaciente(@PathVariable Long id, HttpSession session) {
+        if (isNotLogged(session)) return "redirect:/login";
+        pacienteService.excluir(id);
         return "redirect:/dashboard/pacientes";
     }
 
@@ -86,11 +122,18 @@ public class DashboardController {
         return "leitos/listar";
     }
 
+    @GetMapping("/leitos/excluir/{id}")
+    public String excluirLeito(@PathVariable Long id, HttpSession session) {
+        if (isNotLogged(session)) return "redirect:/login";
+        leitoService.excluir(id);
+        return "redirect:/dashboard/leitos";
+    }
+
     // ALAS
     @GetMapping("/alas")
     public String listarAlas(HttpSession session, Model model) {
         if (isNotLogged(session)) return "redirect:/login";
-        model.addAttribute("alas", alaService.listarTodas());
+        model.addAttribute("alas", alaService.listarTodos());
         return "alas/listar";
     }
 
@@ -101,9 +144,25 @@ public class DashboardController {
         return "alas/form";
     }
 
+    @GetMapping("/alas/editar/{id}")
+    public String editarAla(@PathVariable Long id, HttpSession session, Model model) {
+        if (isNotLogged(session)) return "redirect:/login";
+        Ala ala = alaService.buscarPorId(id).orElse(null);
+        if (ala == null) return "redirect:/dashboard/alas";
+        model.addAttribute("ala", ala);
+        return "alas/form";
+    }
+
     @PostMapping("/alas/salvar")
     public String salvarAla(@ModelAttribute Ala ala) {
         alaService.salvar(ala);
+        return "redirect:/dashboard/alas";
+    }
+
+    @GetMapping("/alas/excluir/{id}")
+    public String excluirAla(@PathVariable Long id, HttpSession session) {
+        if (isNotLogged(session)) return "redirect:/login";
+        alaService.excluir(id);
         return "redirect:/dashboard/alas";
     }
 
@@ -119,7 +178,17 @@ public class DashboardController {
     public String novoQuarto(HttpSession session, Model model) {
         if (isNotLogged(session)) return "redirect:/login";
         model.addAttribute("quarto", new Quarto());
-        model.addAttribute("alas", alaService.listarTodas());
+        model.addAttribute("alas", alaService.listarTodos());
+        return "quartos/form";
+    }
+
+    @GetMapping("/quartos/editar/{id}")
+    public String editarQuarto(@PathVariable Long id, HttpSession session, Model model) {
+        if (isNotLogged(session)) return "redirect:/login";
+        Quarto quarto = quartoService.buscarPorId(id).orElse(null);
+        if (quarto == null) return "redirect:/dashboard/quartos";
+        model.addAttribute("quarto", quarto);
+        model.addAttribute("alas", alaService.listarTodos());
         return "quartos/form";
     }
 
@@ -129,11 +198,18 @@ public class DashboardController {
         return "redirect:/dashboard/quartos";
     }
 
+    @GetMapping("/quartos/excluir/{id}")
+    public String excluirQuarto(@PathVariable Long id, HttpSession session) {
+        if (isNotLogged(session)) return "redirect:/login";
+        quartoService.excluir(id);
+        return "redirect:/dashboard/quartos";
+    }
+
     // ESPECIALIDADES
     @GetMapping("/especialidades")
     public String listarEspecialidades(HttpSession session, Model model) {
         if (isNotLogged(session)) return "redirect:/login";
-        model.addAttribute("especialidades", especialidadeService.listarTodas());
+        model.addAttribute("especialidades", especialidadeService.listarTodos());
         return "especialidades/listar";
     }
 
@@ -144,9 +220,26 @@ public class DashboardController {
         return "especialidades/form";
     }
 
+    @GetMapping("/especialidades/editar/{id}")
+    public String editarEspecialidade(@PathVariable Long id, HttpSession session, Model model) {
+        if (isNotLogged(session)) return "redirect:/login";
+        Especialidade especialidade = especialidadeService.buscarPorId(id).orElse(null);
+        if (especialidade == null) return "redirect:/dashboard/especialidades";
+        model.addAttribute("especialidade", especialidade);
+        return "especialidades/form";
+    }
+
     @PostMapping("/especialidades/salvar")
     public String salvarEspecialidade(@ModelAttribute Especialidade especialidade) {
         especialidadeService.salvar(especialidade);
         return "redirect:/dashboard/especialidades";
     }
+
+    @GetMapping("/especialidades/excluir/{id}")
+    public String excluirEspecialidade(@PathVariable Long id, HttpSession session) {
+        if (isNotLogged(session)) return "redirect:/login";
+        especialidadeService.excluir(id);
+        return "redirect:/dashboard/especialidades";
+    }
+
 }
